@@ -11,6 +11,17 @@ import styles from "./styles";
 import assets from "./assets";
 
 class HomeScreen extends React.Component {
+  static navigationOptions = {
+    header: null
+  };
+  state = {
+    show: false
+  };
+
+  handleClick = () => {
+    this.setState({ show: !this.state.show });
+  };
+
   render() {
     return (
       <ImageBackground
@@ -24,11 +35,25 @@ class HomeScreen extends React.Component {
         <View style={styles.wrapperLogoDevPleno}>
           <Image source={assets.devPleno} />
         </View>
-        <TouchableWithoutFeedback>
-          <View style={styles.buttonBackground}>
-            <Text style={styles.buttonText}>COMEÇAR!</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        {!this.state.show ? (
+          <TouchableWithoutFeedback onPress={this.handleClick}>
+            <View style={styles.buttonBackground}>
+              <Text style={styles.buttonText}>COMEÇAR!</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        ) : (
+          <TouchableWithoutFeedback
+            onPress={() => this.props.navigation.navigate("Trips")}
+          >
+            <View style={styles.buttonEmptyStateBackground}>
+              <Image source={assets.pin} style={styles.pin} />
+              <Text style={styles.buttonEmptyStateText}>
+                Vamos planejar sua primeira viagem?
+              </Text>
+              <Image source={assets.arrow} style={styles.arrow} />
+            </View>
+          </TouchableWithoutFeedback>
+        )}
       </ImageBackground>
     );
   }

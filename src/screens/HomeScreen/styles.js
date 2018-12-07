@@ -26,7 +26,26 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     fontWeight: "400",
-    color: "#24C6DC"
+    color: "#000"
+  },
+  pin: {
+    marginBottom: 16
+  },
+  arrow: {
+    marginTop: 16
+  },
+  buttonEmptyStateBackground: {
+    backgroundColor: "white",
+    paddingBottom: 16,
+    paddingTop: 16,
+    alignItems: "center"
+  },
+  buttonEmptyStateText: {
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "400",
+    color: "#000",
+    width: 220
   }
 });
 
