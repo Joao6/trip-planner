@@ -1,20 +1,53 @@
 import React from "react";
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  AsyncStorage
+} from "react-native";
 import styles from "./styles";
 
 class TripScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
+  state = {
+    trips: [],
+    points: []
+  };
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData = async () => {
+    const tripId = this.props.navigation.state.params.id;
+
+    const tripsAs = await AsyncStorage.getItem("trips");
+    let trips = [];
+    if (tripsAs) {
+      trips = JSON.parse(tripsAs);
+    }
+
+    const pointsAs = await AsyncStorage.getItem("trip-" + tripId);
+    let points = [];
+    if (pointsAs) {
+      points = JSON.parse(pointsAs);
+    }
+
+    this.setState({ trips, points });
+  };
+
   renderItem = item => {
     return (
       <View style={styles.item}>
         <View style={styles.wrapperInfo}>
-          <Text style={styles.itemName}>{item.item.name}</Text>
+          <Text style={styles.itemName}>{item.item.pointName}</Text>
           <Text style={styles.itemDescription}>{item.item.description}</Text>
         </View>
         <View style={styles.wrapperItemPrice}>
-          <Text style={styles.itemPrice}>R$ {item.item.price}</Text>
+          <Text style={styles.itemPrice}>R$ {item.item.price.toFixed(2)}</Text>
         </View>
       </View>
     );
@@ -42,6 +75,7 @@ class TripScreen extends React.Component {
         }
       ]
     };
+    const { points } = this.state;
     return (
       <View style={styles.wrapper}>
         <View style={styles.header}>
@@ -51,16 +85,12 @@ class TripScreen extends React.Component {
             </TouchableOpacity>
           </View>
           <Text style={styles.tripTitle}>{trip.title}</Text>
-          <Text
-            style={styles.tripPrice}
-          >
-            R$ {trip.price}
-          </Text>
+          <Text style={styles.tripPrice}>R$ {trip.price}</Text>
         </View>
         <FlatList
           style={{ flex: 1 }}
           contentContainerStyle={{ padding: 16 }}
-          data={trip.places}
+          data={points}
           renderItem={this.renderItem}
           keyExtractor={item => item.id}
         />
